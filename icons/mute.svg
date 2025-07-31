@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 64 64">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+
+      .cls-2 {
+        fill: none;
+        stroke: #fff;
+        stroke-width: 5px;
+      }
+
+      .cls-3 {
+        display: none;
+      }
+    </style>
+  </defs>
+  <!-- Generator: Adobe Illustrator 28.7.8, SVG Export Plug-In . SVG Version: 1.2.0 Build 200)  -->
+  <g>
+    <g id="_レイヤー_1" data-name="レイヤー_1">
+      <rect class="cls-3" width="64" height="64"/>
+      <polygon class="cls-1" points="12 24 24 24 36 12 36 52 24 40 12 40 12 24"/>
+      <line class="cls-2" x1="20.8" y1="15.2" x2="51.2" y2="48.8"/>
+    </g>
+  </g>
+</svg>
