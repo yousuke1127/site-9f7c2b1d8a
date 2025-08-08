@@ -5,21 +5,21 @@ let isMuted = false;
 
 
 const videoMap = {
-  Video0001: 'iVXipMkPhk8',
-  Video0002: 'InoUPQUM8_4',
-  Video0003: 'PLngt6snHkM',
-  Video0004: 'vhhC94DNha4',
-  Video0005: 'yPqkNk-YpxA',
-  Video0006: 'AoNP5TW0WMo', 
-  Video0007: 'AoNP5TW0WMo', // 15‚à“¯‚¶ 
-  Video0008: 'JhzQDUCJfXY',
-  Video0009: 'a78zkPOohao',
-  Video0010: 'qyQCGZ3Y4fs', 
-  Video0011: 'AeGQ8scTgJI', 
-  Video0012: 'vkapj_KF8J4', 
-  Video0013: '9VWJKDs3Ghw', 
-  Video0014: 'AoNP5TW0WMo', // 6‚à“¯‚¶
-  Video0015: 'AoNP5TW0WMo' // 7‚à“¯‚¶
+  Video0001: '070tnAsX34g',
+  Video0002: 'yFA2DvGGGvw',
+  Video0003: 'iwCw9k2WmCY',
+  Video0004: 'UhsStqNDi2o',
+  Video0005: 'WiR0Fd_DP7g',
+  Video0006: 'YfZGP4W_A-Q', 
+  Video0007: 'kTa5rJsHUUE', // 15‚à“¯‚¶ 
+  Video0008: 'CRa8WUODCfc',
+  Video0009: 'fnUBD8QWH1g',
+  Video0010: 'WZwVeKzwMY0', 
+  Video0011: 'R98lhUYhyP0', 
+  Video0012: 'M-HRDil8fLE', 
+  Video0013: '-fSI0M9Gfv8', 
+  Video0014: 'YfZGP4W_A-Q', // 6‚à“¯‚¶
+  Video0015: 'kTa5rJsHUUE' // 7‚à“¯‚¶
 };
 // Video0004 ‚Í Video0002‚É–ß‚éƒ{ƒ^ƒ“
 
