@@ -5,11 +5,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>インタラクティブ動画（YouTube版）</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?20250812" />
 </head>
 <body>
-
 <div class="video-wrapper">
+  <a style="color: white;">text</a>
 
   <!-- タップして再生 -->
   <div id="start-overlay"><div class="play-button"></div></div>
@@ -30,7 +30,7 @@
 		<!-- Video0002 へ遷移するボタン -->
         <a href="#" class="area hidden" id="to-Video0002">
           <!-- <path d="M830,397 L1091,397 L1091,658 L830,658 Z" stroke="none" /> -->
-			<circle cx="960" cy="528" r="130" stroke="none" />
+		    	<circle cx="960" cy="528" r="130" stroke="none" />
         </a>
 		<!-- Video0003 へ遷移するボタン -->
         <a href="#" class="area hidden" id="to-Video0003">
@@ -77,7 +77,17 @@
         <a href="#" class="area hidden" id="to-Video0015">
           <path d="M1345,605 L1819,605 L1819,959 L1345,959 Z" stroke="none" />
         </a>
-		  
+		<!-- 外部URL へ遷移するボタン -->
+        <a href="https://www.city.kuji.lg.jp/soshiki/hokensuishin/1/4/5/1272.html" target="_blank" class="area hidden" id="to-ExternalURL">
+          <path d="M120,200 L640,200 L640,540 L120,540 Z" stroke="none" />
+        </a>
+        <a href="#" class="area hidden" id="to-Video0002v2">
+          <path d="M250,450 L920,450 L920,850 L250,850 Z" stroke="none" />
+        </a>
+        <a href="#" class="area hidden" id="to-Video0008v2">
+          <path d="M1180,450 L1580,450 L1580,850 L1180,850 Z" stroke="none" />
+        </a>
+
       </svg>
     </div>
   </div>
@@ -98,7 +108,7 @@
 
 <!-- YouTube IFrame API -->
 <script src="https://www.youtube.com/iframe_api"></script>
-<script src="js/script.js"></script>
+<script src="js/script.js?20250820"></script>
 
 </body>
 </html>

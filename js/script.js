@@ -5,40 +5,43 @@ let isMuted = false;
 
 
 const videoMap = {
-  Video0001: '070tnAsX34g',
-  Video0002: 'yFA2DvGGGvw',
-  Video0003: 'iwCw9k2WmCY',
-  Video0004: 'UhsStqNDi2o',
-  Video0005: 'WiR0Fd_DP7g',
-  Video0006: 'YfZGP4W_A-Q', 
-  Video0007: 'kTa5rJsHUUE', // 15‚à“¯‚¶ 
-  Video0008: 'CRa8WUODCfc',
-  Video0009: 'fnUBD8QWH1g',
-  Video0010: 'WZwVeKzwMY0', 
-  Video0011: 'R98lhUYhyP0', 
-  Video0012: 'M-HRDil8fLE', 
-  Video0013: '-fSI0M9Gfv8', 
-  Video0014: 'YfZGP4W_A-Q', // 6‚à“¯‚¶
-  Video0015: 'kTa5rJsHUUE' // 7‚à“¯‚¶
+  Video0001: '070tnAsX34g',//           æœ€åˆã®å‹•ç”»
+  Video0002: 'yFA2DvGGGvw',//           æœ€åˆã®é¸æŠžç”»é¢
+  Video0003: 'SrO6layUciw',//           ã‚¤ãƒ³ã‚¿ãƒ“ãƒ¥ãƒ¼ç·¨
+  Video0004: '70D5diuvTXc',//           2ã«æˆ»ã‚‹ãƒœã‚¿ãƒ³
+  Video0005: 'WiR0Fd_DP7g',//           ç”³ã—è¾¼ã¿ç·¨
+  Video0006: 'SpPNOpGFDF4',//           ä¹³ãŒã‚“æ¤œè¨º
+  Video0007: 'Bn5mcOH4-6g',// 15ã‚‚åŒã˜   æ–½è¨­ç´¹ä»‹ 
+  Video0008: 'jRHqC4XMFaY',//           æ¤œè¨ºç·¨
+  Video0009: 'q2bLgkCU1zg',
+  Video0010: 'RhtPeXPSwto', 
+  Video0011: 'fCrDjsXBHq8', 
+  Video0012: 'aw5EOLa4Nzo', 
+  Video0013: 'HXdum60yiHI', 
+  Video0014: 'SpPNOpGFDF4', // 6ã‚‚åŒã˜   å­å®®é ¸ãŒã‚“æ¤œè¨º
+  Video0015: 'Bn5mcOH4-6g', // 7ã‚‚åŒã˜
+  Video0016: 'nJCJwgR5gP8'  //           2ã¨8ã¸ã®é¸æŠžè‚¢ã®å‹•ç”»
 };
-// Video0004 ‚Í Video0002‚É–ß‚éƒ{ƒ^ƒ“
+// Video0004 ã¯ Video0002ã«æˆ»ã‚‹ãƒœã‚¿ãƒ³
+// const ExternalURL = 'https://www.city.kuji.lg.jp/soshiki/hokensuishin/1/4/5/1272.html';
 
-// Ž©“®‘JˆÚ‚·‚éæ‚Ì“®‰æFSource: 'Destination'
+
+// è‡ªå‹•é·ç§»ã™ã‚‹å…ˆã®å‹•ç”»ï¼šSource: 'Destination'
 const nextVideoMap = {
   Video0001: 'Video0002',
   Video0003: 'Video0004',
   Video0005: 'Video0004',
   Video0006: 'Video0010',
   Video0007: 'Video0006',
-  Video0009: 'Video0004',
+  Video0009: 'Video0016',
   Video0010: 'Video0011',
-  Video0012: 'Video0004',
-  Video0013: 'Video0004',
+  Video0012: 'Video0016',
+  Video0013: 'Video0016',
   Video0014: 'Video0009',
   Video0015: 'Video0014'
 };
 
-// ƒ{ƒ^ƒ“‚ð•\Ž¦‚µ‘JˆÚ‚³‚¹‚½‚¢æ‚Ì“®‰æ‚ÌƒŠƒXƒg
+// ãƒœã‚¿ãƒ³ã‚’è¡¨ç¤ºã—é·ç§»ã•ã›ãŸã„å…ˆã®å‹•ç”»ã®ãƒªã‚¹ãƒˆ
 const timeMaps = {
   Video0001: [],
   Video0002: [
@@ -52,7 +55,8 @@ const timeMaps = {
   ],
   Video0005: [],
   Video0006: [
-    { start: 0.5, end: 9999, id: 'to-Video0007' }
+    { start: 3.0, end: 9999, id: 'to-ExternalURL' },
+    { start: 3.0, end: 9999, id: 'to-Video0007' }
   ],
   Video0007: [],
   Video0008: [
@@ -68,9 +72,14 @@ const timeMaps = {
   Video0012: [],
   Video0013: [],
   Video0014: [
-    { start: 0.5, end: 9999, id: 'to-Video0015' }
+    { start: 3.0, end: 9999, id: 'to-ExternalURL' },
+    { start: 3.0, end: 9999, id: 'to-Video0015' }
   ],
-  Video0015: []
+  Video0015: [],
+  Video0016: [
+    { start: 0.5, end: 9999, id: 'to-Video0002v2' },
+    { start: 0.5, end: 9999, id: 'to-Video0008v2' }
+  ],
 };
 
 let timeMap = timeMaps[currentVideo];
@@ -82,14 +91,14 @@ function onYouTubeIframeAPIReady() {
     videoId: videoMap['Video0001'],
     playerVars: {
 		autoplay: 1,
-		controls: 1,         // ƒRƒ“ƒgƒ[ƒ‹•\Ž¦
-		modestbranding: 1,   // YouTubeƒƒSÅ¬‰»
-		rel: 0,              // I—¹Œã‚ÌŠÖ˜A“®‰æ‚ð”ñ•\Ž¦iŒ»Ý‚Í“¯‚¶ƒ`ƒƒƒ“ƒlƒ‹“à‚ÉŒÀ’è‚³‚ê‚éj
-		showinfo: 0,         // ƒ^ƒCƒgƒ‹“™”ñ•\Ž¦iŒ»Ý‚Í–³Œøj
-		fs: 0,               // ƒtƒ‹ƒXƒNƒŠ[ƒ“ƒ{ƒ^ƒ“”ñ•\Ž¦
-		iv_load_policy: 3,   // ƒAƒmƒe[ƒVƒ‡ƒ“”ñ•\Ž¦
-		disablekb: 1,        // ƒL[ƒ{[ƒh‘€ì–³Œø‰»
-		playsinline: 1       // ƒ‚ƒoƒCƒ‹‚Å‚àƒCƒ“ƒ‰ƒCƒ“Ä¶
+		controls: 1,         // ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«è¡¨ç¤º
+		modestbranding: 1,   // YouTubeãƒ­ã‚´æœ€å°åŒ–
+		rel: 0,              // çµ‚äº†å¾Œã®é–¢é€£å‹•ç”»ã‚’éžè¡¨ç¤ºï¼ˆç¾åœ¨ã¯åŒã˜ãƒãƒ£ãƒ³ãƒãƒ«å†…ã«é™å®šã•ã‚Œã‚‹ï¼‰
+		showinfo: 0,         // ã‚¿ã‚¤ãƒˆãƒ«ç­‰éžè¡¨ç¤ºï¼ˆç¾åœ¨ã¯ç„¡åŠ¹ï¼‰
+		fs: 0,               // ãƒ•ãƒ«ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ãƒœã‚¿ãƒ³éžè¡¨ç¤º
+		iv_load_policy: 3,   // ã‚¢ãƒŽãƒ†ãƒ¼ã‚·ãƒ§ãƒ³éžè¡¨ç¤º
+		disablekb: 1,        // ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰æ“ä½œç„¡åŠ¹åŒ–
+		playsinline: 1       // ãƒ¢ãƒã‚¤ãƒ«ã§ã‚‚ã‚¤ãƒ³ãƒ©ã‚¤ãƒ³å†ç”Ÿ
     },
     events: {
       onReady: onPlayerReady,
@@ -111,6 +120,10 @@ function onPlayerReady() {
   setInterval(() => {
     const time = player.getCurrentTime();
     document.querySelectorAll('.svg-map .area').forEach(el => el.classList.add('hidden'));
+    // timeMap = timeMaps[currentVideo];
+    if(timeMap === undefined) {
+      console.log(currentVideo)
+    }
     timeMap.forEach(area => {
       if (time >= area.start && time <= area.end) {
         document.getElementById(area.id).classList.remove('hidden');
@@ -121,21 +134,21 @@ function onPlayerReady() {
 
 function onPlayerStateChange(event) {
   if (event.data === YT.PlayerState.PLAYING) {
-    // Ä¶ŠJŽnŽž‚ÉŠÄŽ‹‚ðŠJŽn
+    // å†ç”Ÿé–‹å§‹æ™‚ã«ç›£è¦–ã‚’é–‹å§‹
     clearInterval(checkEndInterval);
-	player.setPlaybackQuality('hd1080');  // ‰æŽ¿Ý’è‚ÌŠó–]‚ðo‚·
+    player.setPlaybackQuality('hd1080');  // ç”»è³ªè¨­å®šã®å¸Œæœ›ã‚’å‡ºã™
 	  
 	  /*
-	setTimeout(() => {
+    setTimeout(() => {
       const upper_mask = document.querySelector('.upper-overlay-mask');
       const lower_mask = document.querySelector('.lower-overlay-mask');
       if (upper_mask) {
         upper_mask.classList.add('fade-out');
       }
-	  if (lower_mask) {
-        lower_mask.classList.add('fade-out');
+      if (lower_mask) {
+          lower_mask.classList.add('fade-out');
       }
-    }, 5000); // 5•bŒã‚ÉƒtƒF[ƒhƒAƒEƒg
+    }, 5000); // 5ç§’å¾Œã«ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆ
 	  */
 	  
     checkEndInterval = setInterval(() => {
@@ -156,7 +169,7 @@ function onPlayerStateChange(event) {
   }
 
   if (event.data === YT.PlayerState.ENDED || event.data === YT.PlayerState.PAUSED) {
-    // Ä¶I—¹Žž‚Ü‚½‚ÍˆêŽž’âŽ~Žž‚ÉŠÄŽ‹‚ð’âŽ~
+    // å†ç”Ÿçµ‚äº†æ™‚ã¾ãŸã¯ä¸€æ™‚åœæ­¢æ™‚ã«ç›£è¦–ã‚’åœæ­¢
     clearInterval(checkEndInterval);
 	  
 	  /*
@@ -173,37 +186,46 @@ function switchVideo(id) {
   currentVideo = id;
   timeMap = timeMaps[id];
   console.log("currentVideo:", currentVideo);
+
+  if(id === 'ExternalURL') return;
 	/*
-  // ƒ{ƒ^ƒ“‚ðæ‚É”ñ•\Ž¦‚É‚·‚éF
+  // ãƒœã‚¿ãƒ³ã‚’å…ˆã«éžè¡¨ç¤ºã«ã™ã‚‹ï¼š
   document.querySelectorAll('.svg-map .area').forEach(el => el.classList.add('hidden'));
 	*/
-  // ƒtƒF[ƒhƒAƒEƒg
+  // ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆ
   const fader = document.querySelector('.fade-target');
-//@fader.style.transition = 'opacity 0.4s ease';
+  //ã€€fader.style.transition = 'opacity 0.4s ease';
   fader.style.opacity = '0';
 	
   setTimeout(() => {
     player.loadVideoById(videoMap[id]);
 	  console.log(player);
 	  
-    // •\Ž¦ƒ{ƒ^ƒ“‚ÌXV
+    // è¡¨ç¤ºãƒœã‚¿ãƒ³ã®æ›´æ–°
     document.querySelectorAll('.svg-map .area').forEach(el => {
       el.classList.add('hidden');
-      // ŒÃ‚¢ƒŠƒXƒi[‚ð‰ðœiŠÈˆÕ‚È‘Îô‚Æ‚µ‚Ä cloneNode ‚Å“ü‚ê‘Ö‚¦j
+      // å¤ã„ãƒªã‚¹ãƒŠãƒ¼ã‚’è§£é™¤ï¼ˆç°¡æ˜“ãªå¯¾ç­–ã¨ã—ã¦ cloneNode ã§å…¥ã‚Œæ›¿ãˆï¼‰
       const newEl = el.cloneNode(true);
       el.parentNode.replaceChild(newEl, el);
     });
 	  
-	 // Œ»Ý‚Ì timeMap ‚É“o˜^‚³‚ê‚½‚·‚×‚Ä‚Ìƒ{ƒ^ƒ“‚ÉƒŠƒXƒi[‚ð’Ç‰Á
-	timeMap.forEach(area => {
-	  const el = document.getElementById(area.id);
-	  if (el) {
-		el.addEventListener('click', () => {
-		  const nextId = area.id.replace('to-', '');
-		  switchVideo(nextId);
-		});
-	  }
-	});
+    // ç¾åœ¨ã® timeMap ã«ç™»éŒ²ã•ã‚ŒãŸã™ã¹ã¦ã®ãƒœã‚¿ãƒ³ã«ãƒªã‚¹ãƒŠãƒ¼ã‚’è¿½åŠ 
+    timeMap.forEach(area => {
+      const el = document.getElementById(area.id);
+      if (el && area.id !== 'to-ExternalURL') {
+        el.addEventListener('click', () => {
+          const nextId = area.id.match(/Video\d{4}/);
+          // if (nextId === 'ExternalURL') {
+          //   //åŒã˜windowã§é–‹ã
+          //   // window.location.href = ExternalURL;
+          //   //åˆ¥windowã§é–‹ã
+          //   window.open(ExternalURL, '_blank');
+          // } else {
+            switchVideo(nextId);
+          // }
+        });
+      }
+    });
 	  
 	  
     setTimeout(() => {
@@ -216,7 +238,7 @@ function switchVideo(id) {
 
 document.getElementById('pause-button').addEventListener('click', (event) => {
   const isPaused = player.getPlayerState() === YT.PlayerState.PAUSED;
-const icon = event.currentTarget.querySelector('img'); // ‘ÎÛ‚Ì‰æ‘œ‚ðŽæ“¾
+  const icon = event.currentTarget.querySelector('img'); // å¯¾è±¡ã®ç”»åƒã‚’å–å¾—
   if (isPaused) {
     player.playVideo();
     icon.src = 'icons/pause.svg';
@@ -230,7 +252,7 @@ const icon = event.currentTarget.querySelector('img'); // ‘ÎÛ‚Ì‰æ‘œ‚ðŽæ“¾
 
 document.getElementById('mute-button').addEventListener('click', (event) => {
   isMuted = !isMuted;
-	  const icon = event.currentTarget.querySelector('img'); // ‘ÎÛ‚Ì‰æ‘œ‚ðŽæ“¾
+	  const icon = event.currentTarget.querySelector('img'); // å¯¾è±¡ã®ç”»åƒã‚’å–å¾—
   if (isMuted) {
     player.mute();
     icon.src = 'icons/mute.svg';
@@ -242,3 +264,15 @@ document.getElementById('mute-button').addEventListener('click', (event) => {
   }
 });
 
+// window.addEventListener("visibilitychange", event => {
+//   if (document.visibilityState === "visible") {x
+//     const iframe = document.getElementById("player");
+//     if (iframe) {
+//       console.log("iframe found");
+//       const temp = iframe.src;
+//       iframe.src = "";
+//       iframe.src = temp;
+
+//     }
+//   }
+// });
