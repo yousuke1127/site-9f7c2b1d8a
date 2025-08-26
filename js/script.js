@@ -7,11 +7,11 @@ let isMuted = false;
 const videoMap = {
   Video0001: '070tnAsX34g',//           最初の動画
   Video0002: 'yFA2DvGGGvw',//           最初の選択画面
-  Video0003: 'SrO6layUciw',//           インタビュー編
-  Video0004: '70D5diuvTXc',//           2に戻るボタン
+  Video0003: 'sZ28OtOBuf4',//           インタビュー編
+  Video0004: 'eCIupzGnVkE',//           2に戻るボタン
   Video0005: 'WiR0Fd_DP7g',//           申し込み編
   Video0006: 'SpPNOpGFDF4',//           乳がん検診
-  Video0007: 'Bn5mcOH4-6g',// 15も同じ   施設紹介 
+  Video0007: 'mo2_E4-IFPE',// 15も同じ   施設紹介 
   Video0008: 'jRHqC4XMFaY',//           検診編
   Video0009: 'q2bLgkCU1zg',
   Video0010: 'RhtPeXPSwto', 
@@ -19,8 +19,8 @@ const videoMap = {
   Video0012: 'aw5EOLa4Nzo', 
   Video0013: 'HXdum60yiHI', 
   Video0014: 'SpPNOpGFDF4', // 6も同じ   子宮頸がん検診
-  Video0015: 'Bn5mcOH4-6g', // 7も同じ
-  Video0016: 'nJCJwgR5gP8'  //           2と8への選択肢の動画
+  Video0015: 'mo2_E4-IFPE', // 7も同じ
+  Video0016: 'YRvK8EedQH4'  //           2と8への選択肢の動画
 };
 // Video0004 は Video0002に戻るボタン
 // const ExternalURL = 'https://www.city.kuji.lg.jp/soshiki/hokensuishin/1/4/5/1272.html';
