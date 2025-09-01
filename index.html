@@ -4,9 +4,21 @@
 	<meta name="robots" content="noindex">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="Cache-Control" content="no-store">
   <title>インタラクティブ動画（YouTube版）</title>
-  <link rel="stylesheet" href="css/style.css?20250812" />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8DZ0D36D1K"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8DZ0D36D1K');
+</script>
+
 <body>
 <div class="video-wrapper">
   <a style="color: white;">text</a>
@@ -16,7 +28,6 @@
 
   <!-- YouTube iframe player -->
   <div class="video-block fade-target" id="player-container">
-	  
 	 <!-- YT.Player を初期化 -->
     <div id="player"></div>
 	<!--
@@ -90,6 +101,12 @@
 
       </svg>
     </div>
+
+    <!-- パンくずリスト -->
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+      <ul id="breadcrumb">
+      </ul>
+    </nav>
   </div>
 
   <!-- カスタムコントロール -->
@@ -108,7 +125,7 @@
 
 <!-- YouTube IFrame API -->
 <script src="https://www.youtube.com/iframe_api"></script>
-<script src="js/script.js?20250820"></script>
+<script src="js/script.js"></script>
 
 </body>
 </html>

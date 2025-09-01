@@ -114,7 +114,7 @@ html, body {
   left: 0;
   width: 100%;
   height: 100%;
- pointer-events: none;
+  pointer-events: none;
   z-index: 31;
 }
 
@@ -182,6 +182,62 @@ html, body {
   z-index: 50;
   cursor: pointer;
 }
+
+.breadcrumb {
+  position: absolute;
+  top: 20px;
+  left: 30px;
+  pointer-events: auto;
+  z-index: 30;
+  /* margin-top: 17px;
+  margin-left: 30px; */
+
+}
+
+/* .breadcrumb li:not(:first-child)::before {
+  content: "> ";
+} */
+.breadcrumb li:not(:last-child)::after {
+  display: inline-block;
+  margin: 0 .25rem;
+  content: ">";
+}
+
+.breadcrumb ul {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.breadcrumb a {
+  color: black;         /* 親要素の色を継承 */
+  text-decoration: none;  /* 下線を消す */
+}
+
+/* .breadcrumb {
+  padding: 0 .5rem;
+}
+
+.breadcrumb ul {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.breadcrumb li:not(:last-child)::after {
+  display: inline-block;
+  margin: 0 .25rem;
+  content: "→";
+} */
+
+
+
+
+
 
 /* カスタム操作ボタン（再生・ミュートなど） */
 #custom-controls {

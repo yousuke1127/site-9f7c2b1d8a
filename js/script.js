@@ -7,19 +7,19 @@ let isMuted = false;
 const videoMap = {
   Video0001: '070tnAsX34g',//           最初の動画
   Video0002: 'yFA2DvGGGvw',//           最初の選択画面
-  Video0003: 'sZ28OtOBuf4',//           インタビュー編
+  Video0003: 'jR65tj8-LNM',//           インタビュー編
   Video0004: 'eCIupzGnVkE',//           2に戻るボタン
-  Video0005: 'WiR0Fd_DP7g',//           申し込み編
-  Video0006: 'SpPNOpGFDF4',//           乳がん検診
+  Video0005: 'BdSHfVvHT7M',//           申し込み編
+  Video0006: 'SpPNOpGFDF4',//           持参するもの(乳がん検診)
   Video0007: 'mo2_E4-IFPE',// 15も同じ   施設紹介 
   Video0008: 'jRHqC4XMFaY',//           検診編
-  Video0009: 'q2bLgkCU1zg',
-  Video0010: 'RhtPeXPSwto', 
-  Video0011: 'fCrDjsXBHq8', 
-  Video0012: 'aw5EOLa4Nzo', 
-  Video0013: 'HXdum60yiHI', 
-  Video0014: 'SpPNOpGFDF4', // 6も同じ   子宮頸がん検診
-  Video0015: 'mo2_E4-IFPE', // 7も同じ
+  Video0009: 'q2bLgkCU1zg',//           子宮頸がん検診説明
+  Video0010: 'RhtPeXPSwto',//           乳がん検診問診票
+  Video0011: 'fCrDjsXBHq8',//           乳がん検診選択画面
+  Video0012: 'aw5EOLa4Nzo',//           マンモグラフィ検査
+  Video0013: 'HXdum60yiHI',//           超音波検査
+  Video0014: 'SpPNOpGFDF4', // 6も同じ   持参するもの(子宮頸がん検診)
+  Video0015: 'mo2_E4-IFPE', // 7も同じ   施設紹介
   Video0016: 'YRvK8EedQH4'  //           2と8への選択肢の動画
 };
 // Video0004 は Video0002に戻るボタン
@@ -51,7 +51,7 @@ const timeMaps = {
   ],
   Video0003: [],
   Video0004: [
-    { start: 0.5, end: 9999, id: 'to-Video0002' }
+    { start: 27.5, end: 9999, id: 'to-Video0002' }
   ],
   Video0005: [],
   Video0006: [
@@ -77,18 +77,59 @@ const timeMaps = {
   ],
   Video0015: [],
   Video0016: [
-    { start: 0.5, end: 9999, id: 'to-Video0002v2' },
-    { start: 0.5, end: 9999, id: 'to-Video0008v2' }
+    { start: 27.5, end: 9999, id: 'to-Video0002v2' },
+    { start: 27.5, end: 9999, id: 'to-Video0008v2' }
   ],
 };
-
 let timeMap = timeMaps[currentVideo];
+
+const parentMaps = {
+  Video0002: ['Video0001'],
+  Video0003: ['Video0002'],
+  Video0005: ['Video0002'],
+  Video0006: ['Video0008'],
+  Video0007: ['Video0006'],
+  Video0008: ['Video0002'],
+  Video0009: ['Video0008'],
+  Video0010: ['Video0006'],
+  Video0011: ['Video0010'],
+  Video0012: ['Video0011'],
+  Video0013: ['Video0011'],
+  Video0014: ['Video0008'],
+  Video0015: ['Video0014']
+};
+
+const VideoNames = {
+  Video0001: '導入',
+  Video0002: '検診の種類を選ぶ',
+  Video0003: 'インタビュー編',
+  Video0004: '2に戻るボタン',
+  Video0005: '申し込み編',
+  Video0006: '持参するもの(乳がん検診)',
+  Video0007: '施設紹介',
+  Video0008: '検診編',
+  Video0009: '子宮頸がん検診説明',
+  Video0010: '乳がん検診問診票',
+  Video0011: '乳がん検診選択画面',
+  Video0012: 'マンモグラフィ検査',
+  Video0013: '超音波検査',
+  Video0014: '持参するもの(子宮頸がん検診)',
+  Video0015: '2と8への選択肢の動画',
+  Video0016: '2と8への選択肢の動画'
+}
+
+//.breadcrumbの中の<ul>をbreadcrumbに設定
+const breadcrumb = document.querySelector('#breadcrumb');
+
+
+
+
 
 function onYouTubeIframeAPIReady() {
   player = new YT.Player('player', {
     height: '100%',
     width: '100%',
-    videoId: videoMap['Video0001'],
+    videoId: videoMap[currentVideo],
     playerVars: {
 		autoplay: 1,
 		controls: 1,         // コントロール表示
@@ -137,6 +178,10 @@ function onPlayerStateChange(event) {
     // 再生開始時に監視を開始
     clearInterval(checkEndInterval);
     player.setPlaybackQuality('hd1080');  // 画質設定の希望を出す
+
+    gtag('event', 'VideoPlay', {
+      video_id: currentVideo  
+    });
 	  
 	  /*
     setTimeout(() => {
@@ -160,12 +205,31 @@ function onPlayerStateChange(event) {
 /*		  document.getElementById('custom-controls').style.display = 'none';
 */
 		  	if (nextVideoMap[currentVideo]) {
-			  switchVideo(nextVideoMap[currentVideo]);
-			} else {
-			  player.pauseVideo();
-			}
+			    switchVideo(nextVideoMap[currentVideo]);
+        } else {
+          player.pauseVideo();
+        }
       }
     }, 100);
+
+    //breadcrumbに親要素を順番にたどっていって<ul>内に追加していく
+    breadcrumb.innerHTML = '';
+    let currentParent = currentVideo;
+    while (currentParent) {
+      const listItem = document.createElement('li');
+      const link = document.createElement('a');
+      link.textContent = VideoNames[currentParent];
+      const videoId = currentParent; // ここで値を固定
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        switchVideo(videoId); // 固定した値を渡す
+      });
+      listItem.appendChild(link);
+      breadcrumb.insertBefore(listItem, breadcrumb.firstChild);
+      currentParent = parentMaps[currentParent] ? parentMaps[currentParent][0] : null;
+    }
+    // 順番を逆にする
+    // breadcrumb.innerHTML = Array.from(breadcrumb.children).reverse().map(li => li.outerHTML).join('');
   }
 
   if (event.data === YT.PlayerState.ENDED || event.data === YT.PlayerState.PAUSED) {
@@ -187,7 +251,7 @@ function switchVideo(id) {
   timeMap = timeMaps[id];
   console.log("currentVideo:", currentVideo);
 
-  if(id === 'ExternalURL') return;
+  // if(id === 'ExternalURL') return;
 	/*
   // ボタンを先に非表示にする：
   document.querySelectorAll('.svg-map .area').forEach(el => el.classList.add('hidden'));
@@ -215,14 +279,7 @@ function switchVideo(id) {
       if (el && area.id !== 'to-ExternalURL') {
         el.addEventListener('click', () => {
           const nextId = area.id.match(/Video\d{4}/);
-          // if (nextId === 'ExternalURL') {
-          //   //同じwindowで開く
-          //   // window.location.href = ExternalURL;
-          //   //別windowで開く
-          //   window.open(ExternalURL, '_blank');
-          // } else {
-            switchVideo(nextId);
-          // }
+          switchVideo(nextId);
         });
       }
     });
