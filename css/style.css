@@ -1,3 +1,82 @@
+/* メニューバーと矢印のラッパー */
+#menu-bar-wrapper {
+  position: relative;
+  width: 100%;
+  z-index: 40;
+  top: 0;
+  transition: top 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+#menu-bar-wrapper.hide {
+  top: -30px;
+}
+/* メニューバー本体 */
+#menu-bar {
+  width: 100%;
+  height: 30px;
+  background: white;
+  opacity: 75%;
+  /* color: #fff; */
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  font-size: 16px;
+  position: relative;
+  /* z-index: 100; */
+  transition: top 0.3s;
+  white-space: nowrap;
+
+}
+
+/* メニューバーの下の上向き矢印 */
+#menu-arrow {
+  width: 36px;
+  height: 36px;
+  margin: 10px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  /* z-index: 101; */
+  background: #222;
+  opacity: 0.5;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  border: 2px solid #444;
+}
+#menu-arrow:hover {
+  background: #333;
+}
+#menu-arrow .arrow-line {
+  width: 12px;
+  height: 2px;
+  background: #fff;
+  position: absolute;
+  top: 17px;
+  border-radius: 1px;
+}
+#menu-arrow .arrow-line.left {
+  left: 8px;
+}
+#menu-arrow .arrow-line.right {
+  right: 8px;
+}
+#menu-arrow .arrow-line.left {
+  transform: rotate(-45deg);
+  transition: transform 0.3s;
+}
+#menu-arrow .arrow-line.right {
+  transform: rotate(45deg);
+  transition: transform 0.3s;
+}
+/* 矢印を下向きに */
+#menu-arrow.down .arrow-line.left {
+  transform: rotate(45deg);
+}
+#menu-arrow.down .arrow-line.right {
+  transform: rotate(-45deg);
+}
+
 /* 全体の基本設定 */
 html, body {
   height: 100vh;
@@ -32,7 +111,7 @@ html, body {
   width: 100%;
   height: 100%;
 	z-index: 1;
-  pointer-events: auto;
+  pointer-events: none;
 }
 
 #yt-player {
@@ -48,7 +127,7 @@ html, body {
 /* 動画・SVG・コントロールの共通絶対配置 */
 .video-js,
 #svg-overlay,
-#custom-controls,
+/* #custom-controls, */
 #start-overlay,
 .video-fader {
   position: absolute;
@@ -184,55 +263,30 @@ html, body {
 }
 
 .breadcrumb {
-  position: absolute;
-  top: 20px;
-  left: 30px;
   pointer-events: auto;
-  z-index: 30;
-  /* margin-top: 17px;
-  margin-left: 30px; */
-
 }
 
-/* .breadcrumb li:not(:first-child)::before {
-  content: "> ";
-} */
 .breadcrumb li:not(:last-child)::after {
   display: inline-block;
   margin: 0 .25rem;
-  content: ">";
+  content: "≫";
 }
 
 .breadcrumb ul {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
 .breadcrumb a {
-  color: black;         /* 親要素の色を継承 */
-  text-decoration: none;  /* 下線を消す */
+  color: black;
+  text-decoration: none;
+  /*ホバー時カーソルを指に*/
+  cursor: pointer;
 }
 
-/* .breadcrumb {
-  padding: 0 .5rem;
-}
-
-.breadcrumb ul {
-  display: flex;
-  flex-wrap: wrap;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.breadcrumb li:not(:last-child)::after {
-  display: inline-block;
-  margin: 0 .25rem;
-  content: "→";
-} */
 
 
 
@@ -242,12 +296,10 @@ html, body {
 /* カスタム操作ボタン（再生・ミュートなど） */
 #custom-controls {
   position: absolute;
-  top: 80px;
-  right: 16px;
-	left: 32px;
+  bottom: 3%;
+  width: 100%;
   z-index: 35;
   display: flex;
-  gap: 10px;
 	pointer-events: auto;
 }
 
@@ -255,6 +307,7 @@ html, body {
   background-color: rgba(0,0,0,0.6);
   border: none;
   font-size: 38px;
+  margin-left: 30px;
   padding: 10px 16px;
   border-radius: 8px;
   cursor: pointer;
@@ -267,7 +320,7 @@ html, body {
 }
 
 .control-button:hover {
-  background-color: rgba(255,255,255,0.2);
+  background-color: rgba(00, 225, 255, 0.2);
 }
 
 
@@ -334,3 +387,61 @@ html, body {
   opacity: 1;
 }
 
+#seekbar {
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  transform: translateX(-50%);
+
+  width: 60%;
+  height: 5px;
+  background-color: gray;
+
+  cursor: pointer;
+  pointer-events: auto;
+
+}
+
+#current {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 100%;
+  background: #00e1ff;
+}
+
+#circle {
+  position: absolute;
+  top: -2.5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #00e1ff;
+  cursor: pointer;
+  user-select: none;
+}
+#circle:hover {
+  transform: scale(1.5);
+}
+
+/* シークバー中央下配置 */
+/* .progress-bar-wrapper {
+  transform: translateX(-50%);
+  width: 60%;
+  height: 8px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 4px;
+  z-index: 40;
+}
+.progress-bar {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+#current {
+  height: 100%;
+  background: #00bcd4;
+  border-radius: 4px;
+  transition: width 0.2s;
+} */
