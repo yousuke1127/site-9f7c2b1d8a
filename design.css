@@ -373,3 +373,15 @@ html, body {
 #circle:hover {
   transform: scale(1.5);
 }
+
+/* STARTが確実にクリックできるようにする（保険） */
+#start-overlay{
+  pointer-events: auto !important;
+  z-index: 9999 !important;
+}
+
+/* iframeがクリックを奪うのを防ぐ（保険） */
+#player iframe{
+  pointer-events: none !important;
+}
+
