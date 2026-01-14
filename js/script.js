@@ -1,23 +1,22 @@
-// js/script.js
-
-// ★ sceneObj と MASTER_VIDEO_ID は別ファイルで定義されている前提（あなたの現状のままでOK）
-// const MASTER_VIDEO_ID = "...";
-// const sceneObj = {...};
+// script.js（置き換え用・安全版）
+// scene.js に MASTER_VIDEO_ID / sceneObj がある前提
 
 let player = null;
 let currentSceneKey = "Scene0001";
 
 const startOverlay = document.getElementById("start-overlay");
+
+// （あってもなくてもOKなUI部品）
 const pauseButton = document.getElementById("pause-button");
-const muteButton = document.getElementById("mute-button");
-const pauseIcon = document.getElementById("pause-icon");
-const muteIcon = document.getElementById("mute-icon");
+const muteButton  = document.getElementById("mute-button");
+const pauseIcon   = document.getElementById("pause-icon");
+const muteIcon    = document.getElementById("mute-icon");
 
 const svg = document.querySelector("#svg-overlay svg.svg-map");
 
-const seekbar = document.getElementById("seekbar");
+const seekbar    = document.getElementById("seekbar");
 const currentBar = document.getElementById("current");
-const circle = document.getElementById("circle");
+const circle     = document.getElementById("circle");
 
 let uiTimer = null;
 let isDraggingSeek = false;
@@ -29,6 +28,16 @@ const END_EPS = 0.08;
  * YouTube IFrame API が呼ぶ
  */
 window.onYouTubeIframeAPIReady = function () {
+  // MASTER_VIDEO_ID が未定義なら止める（scene.js読込ミス対策）
+  if (typeof MASTER_VIDEO_ID === "undefined") {
+    console.error("MASTER_VIDEO_ID が見つかりません。scene.js が先に読み込まれているか確認してください。");
+    return;
+  }
+  if (typeof sceneObj === "undefined") {
+    console.error("sceneObj が見つかりません。scene.js が先に読み込まれているか確認してください。");
+    return;
+  }
+
   player = new YT.Player("player", {
     videoId: MASTER_VIDEO_ID,
     playerVars: {
@@ -45,9 +54,16 @@ window.onYouTubeIframeAPIReady = function () {
 };
 
 function onPlayerReady() {
-  // 最初は停止（overlayから開始）
   renderScene(currentSceneKey);
   setControlsEnabled(true);
+
+  // STARTがある場合だけクリックで開始
+  if (startOverlay) {
+    startOverlay.style.display = "flex"; // CSSがdisplay:flex前提でも崩れにくい
+  } else {
+    // STARTが無い場合は自動再生（ブラウザ制限で失敗する可能性はある）
+    goToScene(currentSceneKey, true);
+  }
 }
 
 function onPlayerStateChange(e) {
@@ -61,10 +77,12 @@ function onPlayerStateChange(e) {
 /**
  * overlayクリックで再生開始
  */
-startOverlay.addEventListener("click", () => {
-  startOverlay.style.display = "none";
-  goToScene(currentSceneKey, true);
-});
+if (startOverlay) {
+  startOverlay.addEventListener("click", () => {
+    startOverlay.style.display = "none";
+    goToScene(currentSceneKey, true);
+  });
+}
 
 /**
  * シーンへジャンプ（seek）
@@ -72,11 +90,12 @@ startOverlay.addEventListener("click", () => {
  * @param {boolean} autoPlay
  */
 function goToScene(sceneKey, autoPlay) {
-  const scene = sceneObj[sceneKey];
+  const scene = sceneObj?.[sceneKey];
   if (!scene) {
     console.warn("Scene not found:", sceneKey);
     return;
   }
+  if (!player) return;
 
   currentSceneKey = sceneKey;
 
@@ -86,11 +105,8 @@ function goToScene(sceneKey, autoPlay) {
   // seek
   player.seekTo(scene.start, true);
 
-  if (autoPlay) {
-    player.playVideo();
-  } else {
-    player.pauseVideo();
-  }
+  if (autoPlay) player.playVideo();
+  else player.pauseVideo();
 }
 
 /**
@@ -105,17 +121,19 @@ function detectSceneByTime(t) {
 }
 
 /**
- * SVGクリック領域をシーン定義から生成（ボタンは “すぐ” 出す = 常時表示）
+ * SVGクリック領域をシーン定義から生成
  */
 function renderScene(sceneKey) {
-  const scene = sceneObj[sceneKey];
+  if (!svg) return;
+
+  const scene = sceneObj?.[sceneKey];
   if (!scene) return;
 
   // SVGをクリア
   while (svg.firstChild) svg.removeChild(svg.firstChild);
 
   // ボタン領域を作成
-  for (const btn of scene.button) {
+  for (const btn of scene.button || []) {
     if (btn.type === "rect") {
       const [x, y, w, h] = btn.coordinate;
 
@@ -166,6 +184,8 @@ function renderScene(sceneKey) {
  * ボタンが押された時の処理
  */
 function handleButton(btn) {
+  if (!btn) return;
+
   // 外部リンク
   if (btn.href && btn.href.startsWith("http")) {
     window.open(btn.href, "_blank", "noopener");
@@ -176,37 +196,42 @@ function handleButton(btn) {
   if (btn.id && btn.id.startsWith("to-Scene")) {
     const target = btn.id.replace("to-", "");
     goToScene(target, true);
-    return;
   }
 }
 
 /**
- * コントロール
+ * コントロール（存在する時だけ有効化）
  */
-pauseButton.addEventListener("click", () => {
-  const state = player.getPlayerState();
-  if (state === YT.PlayerState.PLAYING) {
-    player.pauseVideo();
-    pauseIcon.src = "icons/play.svg";
-    pauseIcon.alt = "Play";
-  } else {
-    player.playVideo();
-    pauseIcon.src = "icons/pause.svg";
-    pauseIcon.alt = "Pause";
-  }
-});
+if (pauseButton && pauseIcon) {
+  pauseButton.addEventListener("click", () => {
+    if (!player) return;
+    const state = player.getPlayerState();
+    if (state === YT.PlayerState.PLAYING) {
+      player.pauseVideo();
+      pauseIcon.src = "icons/play.svg";
+      pauseIcon.alt = "Play";
+    } else {
+      player.playVideo();
+      pauseIcon.src = "icons/pause.svg";
+      pauseIcon.alt = "Pause";
+    }
+  });
+}
 
-muteButton.addEventListener("click", () => {
-  if (player.isMuted()) {
-    player.unMute();
-    muteIcon.src = "icons/unmute.svg";
-    muteIcon.alt = "Unmute";
-  } else {
-    player.mute();
-    muteIcon.src = "icons/mute.svg";
-    muteIcon.alt = "Mute";
-  }
-});
+if (muteButton && muteIcon) {
+  muteButton.addEventListener("click", () => {
+    if (!player) return;
+    if (player.isMuted()) {
+      player.unMute();
+      muteIcon.src = "icons/unmute.svg";
+      muteIcon.alt = "Unmute";
+    } else {
+      player.mute();
+      muteIcon.src = "icons/mute.svg";
+      muteIcon.alt = "Mute";
+    }
+  });
+}
 
 /**
  * UI更新 + シーン終端制御
@@ -226,18 +251,18 @@ function startUITimer() {
       renderScene(currentSceneKey);
     }
 
-    // ★ここが今回の「実装」：end で next or stop
-    const scene = sceneObj[currentSceneKey];
+    // end で next or stop
+    const scene = sceneObj?.[currentSceneKey];
     if (scene && t >= scene.end - END_EPS) {
       if (scene.next) {
         goToScene(scene.next, true);
       } else {
-        player.pauseVideo(); // 選択待ち（演出なし）
+        player.pauseVideo(); // 選択待ち
       }
       return;
     }
 
-    // 全体シークUI
+    // 全体シークUI（部品がある時だけ）
     if (d > 0) {
       const p = Math.min(1, Math.max(0, t / d));
       updateSeekUI(p);
@@ -251,52 +276,55 @@ function stopUITimer() {
 }
 
 function updateSeekUI(progress01) {
-  const w = seekbar.clientWidth;
+  if (!seekbar || !currentBar || !circle) return;
+  const w = seekbar.clientWidth || 0;
   const x = w * progress01;
   currentBar.style.width = `${x}px`;
   circle.style.left = `${x - circle.offsetWidth / 2}px`;
 }
 
 /**
- * シークバー操作（クリック＆ドラッグ）
+ * シークバー操作（存在する時だけ有効）
  */
-seekbar.addEventListener("click", (e) => {
-  if (!player) return;
-  const rect = seekbar.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const p = Math.min(1, Math.max(0, x / rect.width));
-  const d = player.getDuration() || 0;
-  if (d > 0) player.seekTo(d * p, true);
-});
+if (seekbar && circle) {
+  seekbar.addEventListener("click", (e) => {
+    if (!player) return;
+    const rect = seekbar.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const p = Math.min(1, Math.max(0, x / rect.width));
+    const d = player.getDuration() || 0;
+    if (d > 0) player.seekTo(d * p, true);
+  });
 
-circle.addEventListener("pointerdown", (e) => {
-  isDraggingSeek = true;
-  circle.setPointerCapture(e.pointerId);
-});
+  circle.addEventListener("pointerdown", (e) => {
+    isDraggingSeek = true;
+    circle.setPointerCapture(e.pointerId);
+  });
 
-circle.addEventListener("pointermove", (e) => {
-  if (!isDraggingSeek || !player) return;
-  const rect = seekbar.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const p = Math.min(1, Math.max(0, x / rect.width));
-  updateSeekUI(p);
-});
+  circle.addEventListener("pointermove", (e) => {
+    if (!isDraggingSeek || !player) return;
+    const rect = seekbar.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const p = Math.min(1, Math.max(0, x / rect.width));
+    updateSeekUI(p);
+  });
 
-circle.addEventListener("pointerup", (e) => {
-  if (!player) return;
-  isDraggingSeek = false;
+  circle.addEventListener("pointerup", (e) => {
+    if (!player) return;
+    isDraggingSeek = false;
 
-  const rect = seekbar.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const p = Math.min(1, Math.max(0, x / rect.width));
-  const d = player.getDuration() || 0;
-  if (d > 0) player.seekTo(d * p, true);
-});
+    const rect = seekbar.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const p = Math.min(1, Math.max(0, x / rect.width));
+    const d = player.getDuration() || 0;
+    if (d > 0) player.seekTo(d * p, true);
+  });
+}
 
 /**
  * 必要に応じてコントロールの有効/無効
  */
 function setControlsEnabled(enabled) {
-  pauseButton.disabled = !enabled;
-  muteButton.disabled = !enabled;
+  if (pauseButton) pauseButton.disabled = !enabled;
+  if (muteButton) muteButton.disabled = !enabled;
 }
