@@ -2,89 +2,41 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>インタラクティブ動画（YouTube版）</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive Video</title>
 </head>
 <body>
 
-<div class="video-wrapper">
+  <!-- YouTube Player -->
+  <div id="player"></div>
 
-  <!-- タップして再生 -->
-  <div id="start-overlay"><div class="play-button"></div></div>
+  <!-- 開始オーバーレイ -->
+  <div id="start-overlay">START</div>
 
-  <!-- YouTube iframe player -->
-  <div class="video-block fade-target" id="player-container">
-	  
-	 <!-- YT.Player を初期化 -->
-    <div id="player"></div>
-	<!--
-  	<div class="upper-overlay-mask">インタラクティブ動画 デモンストレーション</div>
-  	<div class="lower-overlay-mask"></div>
-    -->
-	  
-	<!-- SVGオーバーレイ -->
-    <div id="svg-overlay">
-      <svg viewBox="0 0 1920 1080" class="svg-map" preserveAspectRatio="xMidYMid slice">
-		<!-- Video0002 へ遷移するボタン -->
-        <a href="#" class="area hidden" id="to-Video0002">
-          <!-- <path d="M830,397 L1091,397 L1091,658 L830,658 Z" stroke="none" /> -->
-			<circle cx="960" cy="528" r="130" stroke="none" />
-        </a>
-		<!-- Video0003 へ遷移するボタン -->
-        <a href="#" class="area hidden" id="to-Video0003">
-          <path d="M187,117 L634,117 L634,770 L187,770 Z" stroke="none" />
-        </a>
-		<!-- Video0005 へ遷移するボタン -->
-        <a href="#" class="area hidden" id="to-Video0005">
-          <path d="M737,116 L1184,116 L1184,769 L737,769 Z" stroke="none" />
-        </a>
-		<!-- Video0006 へ遷移するボタン -->
-        <a href="#" class="area hidden" id="to-Video0006">
-          <path d="M1284,117 L1731,117 L1731,770 L1284,770 Z" stroke="none" />
-        </a>
-		<!-- Video0007 へ遷移するボタン -->
-        <a href="#" class="area hidden" id="to-Video0007">
-          <path d="M1345,605 L1819,605 L1819,959 L1345,959 Z" stroke="none" />
-        </a>
-		<!-- Video0009 へ遷移するボタン -->
-        <a href="#" class="area hidden" id="to-Video0009">
-          <path d="M353,116 L800,116 L800,760 L353,760 Z" stroke="none" />
-        </a>
-		<!-- Video0010 へ遷移するボタン -->
-        <a href="#" class="area hidden" id="to-Video0010">
-          <path d="M1094,116 L1541,116 L1541,760 L1094,760 Z" stroke="none" />
-        </a>
-		<!-- Video0012 へ遷移するボタン -->
-        <a href="#" class="area hidden" id="to-Video0012">
-          <path d="M353,116 L800,116 L800,760 L353,760 Z" stroke="none" />
-        </a>
-		<!-- Video0013 へ遷移するボタン -->
-        <a href="#" class="area hidden" id="to-Video0013">
-          <path d="M1094,116 L1541,116 L1541,760 L1094,760 Z" stroke="none" />
-        </a>
-		  
-      </svg>
-    </div>
+  <!-- SVGオーバーレイ -->
+  <div id="svg-overlay">
+    <svg class="svg-map" width="1920" height="1080"></svg>
   </div>
 
-  <!-- カスタムコントロール -->
-	<!--
-  <div id="custom-controls">
-	  <button id="pause-button" class="control-button">
-		<img id="pause-icon" src="icons/pause.svg" alt="Pause" width="24" height="24" />
-	  </button>
-	  <button id="mute-button" class="control-button">
-		<img id="mute-icon" src="icons/unmute.svg" alt="Unmute" width="24" height="24" />
-	  </button>
+  <!-- コントロール -->
+  <button id="pause-button">
+    <img id="pause-icon" src="icons/pause.svg" alt="Pause">
+  </button>
+
+  <button id="mute-button">
+    <img id="mute-icon" src="icons/mute.svg" alt="Mute">
+  </button>
+
+  <!-- シークバー -->
+  <div id="seekbar">
+    <div id="current"></div>
+    <div id="circle"></div>
   </div>
--->
 
-</div>
-
-<!-- YouTube IFrame API -->
-<script src="https://www.youtube.com/iframe_api"></script>
-<script src="js/script.js"></script>
+  <!-- ★読み込み順が命 -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script src="scene.js"></script>
+  <script src="js/script.js"></script>
 
 </body>
 </html>
