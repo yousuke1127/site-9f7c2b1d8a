@@ -13,7 +13,7 @@ const sceneObj = {
     name: "検診の種類を選ぶ",
     start: 12,
     end: 24,
-    next: null, // ★選択待ちで止まる
+    next: null,
     button: [
       { start: 0, end: 9999, href: "#", id: "to-Scene0003", type: "rect", coordinate: [187, 117, 447, 653] },
       { start: 0, end: 9999, href: "#", id: "to-Scene0005", type: "rect", coordinate: [737, 116, 447, 653] }
@@ -32,7 +32,7 @@ const sceneObj = {
     name: "選択に戻る",
     start: 176,
     end: 216,
-    next: null, // ★止めてボタン待ち
+    next: null,
     button: [
       { start: 0, end: 9999, href: "#", id: "to-Scene0002", type: "circle", coordinate: [960, 528, 130] }
     ]
