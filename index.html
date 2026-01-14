@@ -4,39 +4,71 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Interactive Video</title>
+
+  <style>
+    html, body { margin: 0; height: 100%; }
+
+    /* player / overlay / svg を同じ箱で重ねる */
+    #wrap {
+      position: relative;
+      width: 100vw;
+      height: 56.25vw;           /* 16:9 */
+      max-height: 100vh;
+      max-width: 177.78vh;       /* 16:9 を高さ基準で補正 */
+      margin: 0 auto;
+      background: #000;
+    }
+
+    /* YouTube iframe は #player の中に生成される */
+    #player { width: 100%; height: 100%; }
+
+    #start-overlay {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-size: 48px;
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      z-index: 10;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    #svg-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 9;
+      pointer-events: none; /* まず全体は無効 */
+    }
+
+    #svg-overlay .svg-map { width: 100%; height: 100%; }
+
+    /* クリック領域だけ有効化 */
+    #svg-overlay .area { pointer-events: auto; cursor: pointer; }
+
+    /* （任意）デバッグで当たり判定を濃く見たい時は opacity を上げる */
+    /* #svg-overlay .area rect, #svg-overlay .area circle { fill: rgba(255,0,0,0.2); } */
+  </style>
 </head>
+
 <body>
+  <div id="wrap">
+    <!-- YouTube Player -->
+    <div id="player"></div>
 
-  <!-- YouTube Player -->
-  <div id="player"></div>
+    <!-- 開始オーバーレイ -->
+    <div id="start-overlay">START</div>
 
-  <!-- 開始オーバーレイ -->
-  <div id="start-overlay">START</div>
-
-  <!-- SVGオーバーレイ -->
-  <div id="svg-overlay">
-    <svg class="svg-map" width="1920" height="1080"></svg>
-  </div>
-
-  <!-- コントロール -->
-  <button id="pause-button">
-    <img id="pause-icon" src="icons/pause.svg" alt="Pause">
-  </button>
-
-  <button id="mute-button">
-    <img id="mute-icon" src="icons/mute.svg" alt="Mute">
-  </button>
-
-  <!-- シークバー -->
-  <div id="seekbar">
-    <div id="current"></div>
-    <div id="circle"></div>
+    <!-- SVGオーバーレイ -->
+    <div id="svg-overlay">
+      <svg class="svg-map" width="1920" height="1080"></svg>
+    </div>
   </div>
 
   <!-- ★読み込み順が命 -->
   <script src="https://www.youtube.com/iframe_api"></script>
-  <script src="scene.js"></script>
-  <script src="js/script.js"></script>
-
+  <script src="./scene.js"></script>
+  <script src="./script.js"></script>
 </body>
 </html>
