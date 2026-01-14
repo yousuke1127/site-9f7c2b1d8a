@@ -3,57 +3,26 @@ let checkEndInterval = null;
 let currentVideo = 'Video0001';
 let isMuted = false;
 
-
-const videoMap = {
-  Video0001: '0PbHalmeCp4',
-  Video0002: 'c6YXBBldY6A',
-  Video0003: 'PLngt6snHkM',
-  Video0004: 'jwe_rQB-qoE',
-  Video0005: 'tsRMZefxqyw',
-  Video0006: 'uOrDUkd5nb8',
-  Video0007: 'FkCRFpb38xQ',
-  Video0008: '1C2Yv6Lky2k',
-  Video0009: 'vqo53KDLYpM',
-  Video0010: 'f4GgFmCm5QA',
-  Video0011: 'f4GgFmCm5QA',
-  Video0012: 'f4GgFmCm5QA',
-  Video0013: 'f4GgFmCm5QA'
-};
-// Video0004 ‚Í Video0002‚É–ß‚éƒ{ƒ^ƒ“
-
-// ©“®‘JˆÚ‚·‚éæ‚Ì“®‰æFSource: 'Destination'
-const nextVideoMap = {
-  Video0001: 'Video0002',
-  Video0003: 'Video0004',
-  Video0005: 'Video0004',
-  Video0006: 'Video0008',
-  Video0007: 'Video0006',
-  Video0009: 'Video0004',
-  Video0010: 'Video0004',
-  Video0012: 'Video0004',
-  Video0013: 'Video0004'
-};
-
-// ƒ{ƒ^ƒ“‚ğ•\¦‚µ‘JˆÚ‚³‚¹‚½‚¢æ‚Ì“®‰æ‚ÌƒŠƒXƒg
-const timeMaps = {
+const buttonMap = {
   Video0001: [],
   Video0002: [
     { start: 1, end: 9999, id: 'to-Video0003' },
     { start: 1, end: 9999, id: 'to-Video0005' },
-    { start: 1, end: 9999, id: 'to-Video0006' }
+    { start: 1, end: 9999, id: 'to-Video0008' }
   ],
   Video0003: [],
   Video0004: [
-    { start: 0.5, end: 9999, id: 'to-Video0002' }
+    { start: 27.5, end: 9999, id: 'to-Video0002' }
   ],
   Video0005: [],
   Video0006: [
-    { start: 0.5, end: 9999, id: 'to-Video0007' }
+    { start: 3.0, end: 9999, id: 'to-ExternalURL' },
+    { start: 3.0, end: 9999, id: 'to-Video0007' }
   ],
   Video0007: [],
   Video0008: [
-    { start: 0.5, end: 9999, id: 'to-Video0009' },
-    { start: 0.5, end: 9999, id: 'to-Video0010' }
+    { start: 0.5, end: 9999, id: 'to-Video0014' },
+    { start: 0.5, end: 9999, id: 'to-Video0006' }
   ],
   Video0009: [],
   Video0010: [],
@@ -62,26 +31,42 @@ const timeMaps = {
     { start: 0.5, end: 9999, id: 'to-Video0013' }
   ],
   Video0012: [],
-  Video0013: []
+  Video0013: [],
+  Video0014: [
+    { start: 3.0, end: 9999, id: 'to-ExternalURL' },
+    { start: 3.0, end: 9999, id: 'to-Video0015' }
+  ],
+  Video0015: [],
+  Video0016: [
+    { start: 27.5, end: 9999, id: 'to-Video0002v2' },
+    { start: 27.5, end: 9999, id: 'to-Video0008v2' }
+  ]
 };
 
-let timeMap = timeMaps[currentVideo];
+
+
+
+let timeMap = buttonMap[currentVideo];
+
+const button_svg = document.querySelector('.svg-map');
+const breadcrumb = document.querySelector('#breadcrumb');
+
 
 function onYouTubeIframeAPIReady() {
   player = new YT.Player('player', {
     height: '100%',
     width: '100%',
-    videoId: videoMap['Video0001'],
+    videoId: videoObj[currentVideo].videoId,
     playerVars: {
-		autoplay: 1,
-		controls: 1,         // ƒRƒ“ƒgƒ[ƒ‹•\¦
-		modestbranding: 1,   // YouTubeƒƒSÅ¬‰»
-		rel: 0,              // I—¹Œã‚ÌŠÖ˜A“®‰æ‚ğ”ñ•\¦iŒ»İ‚Í“¯‚¶ƒ`ƒƒƒ“ƒlƒ‹“à‚ÉŒÀ’è‚³‚ê‚éj
-		showinfo: 0,         // ƒ^ƒCƒgƒ‹“™”ñ•\¦iŒ»İ‚Í–³Œøj
-		fs: 0,               // ƒtƒ‹ƒXƒNƒŠ[ƒ“ƒ{ƒ^ƒ“”ñ•\¦
-		iv_load_policy: 3,   // ƒAƒmƒe[ƒVƒ‡ƒ“”ñ•\¦
-		disablekb: 1,        // ƒL[ƒ{[ƒh‘€ì–³Œø‰»
-		playsinline: 1       // ƒ‚ƒoƒCƒ‹‚Å‚àƒCƒ“ƒ‰ƒCƒ“Ä¶
+	  autoplay: 1,
+      controls: 0,         // ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«è¡¨ç¤º
+      modestbranding: 1,   // YouTubeãƒ­ã‚´æœ€å°åŒ–
+      rel: 0,              // çµ‚äº†å¾Œã®é–¢é€£å‹•ç”»ã‚’éè¡¨ç¤ºï¼ˆç¾åœ¨ã¯åŒã˜ãƒãƒ£ãƒ³ãƒãƒ«å†…ã«é™å®šã•ã‚Œã‚‹ï¼‰
+      showinfo: 0,         // ã‚¿ã‚¤ãƒˆãƒ«ç­‰éè¡¨ç¤ºï¼ˆç¾åœ¨ã¯ç„¡åŠ¹ï¼‰
+      fs: 0,               // ãƒ•ãƒ«ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ãƒœã‚¿ãƒ³éè¡¨ç¤º
+      iv_load_policy: 3,   // ã‚¢ãƒãƒ†ãƒ¼ã‚·ãƒ§ãƒ³éè¡¨ç¤º
+      disablekb: 1,        // ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰æ“ä½œç„¡åŠ¹åŒ–
+      playsinline: 1       // ãƒ¢ãƒã‚¤ãƒ«ã§ã‚‚ã‚¤ãƒ³ãƒ©ã‚¤ãƒ³å†ç”Ÿ
     },
     events: {
       onReady: onPlayerReady,
@@ -92,42 +77,56 @@ function onYouTubeIframeAPIReady() {
 
 function onPlayerReady() {
 	
-        console.log(`onPlayerReady`);
+  console.log(`onPlayerReady`);
 	
   document.getElementById('start-overlay').addEventListener('click', () => {
     player.playVideo();
-    document.getElementById('start-overlay').style.display = 'none';
-	  	  
+    document.getElementById('start-overlay').style.display = 'none';	  
   });
-	
+
   setInterval(() => {
     const time = player.getCurrentTime();
-    document.querySelectorAll('.svg-map .area').forEach(el => el.classList.add('hidden'));
-    timeMap.forEach(area => {
+    // document.querySelectorAll('.svg-map .area').forEach(el => el.classList.add('hidden'));
+
+    videoObj[currentVideo].button.forEach(area => {
       if (time >= area.start && time <= area.end) {
         document.getElementById(area.id).classList.remove('hidden');
       }
     });
-  }, 300);
+    // ã‚·ãƒ¼ã‚¯ãƒãƒ¼ã®æ›´æ–°
+    const current = document.querySelector('#current');
+    const currentCircle = document.querySelector('#circle');
+    const duration = player.getDuration();
+    const currentTime = player.getCurrentTime();
+    if (duration && current) {
+      const timeRatio = (currentTime / (duration - 1.5)) * 100;
+      current.style.width = timeRatio + '%';
+      currentCircle.style.left = timeRatio + '%';
+    }
+  }, 100);
 }
 
 function onPlayerStateChange(event) {
   if (event.data === YT.PlayerState.PLAYING) {
-    // Ä¶ŠJn‚ÉŠÄ‹‚ğŠJn
+    // å†ç”Ÿé–‹å§‹æ™‚ã«ç›£è¦–ã‚’é–‹å§‹
     clearInterval(checkEndInterval);
-	player.setPlaybackQuality('hd1080');  // ‰æ¿İ’è‚ÌŠó–]‚ğo‚·
-	  
+    player.setPlaybackQuality('hd1080');  // ç”»è³ªè¨­å®šã®å¸Œæœ›ã‚’å‡ºã™
+
+    gtag('event', 'VideoPlay', {
+      video_id: currentVideo  
+    });
+
 	  /*
-	setTimeout(() => {
+    setTimeout(() => {
       const upper_mask = document.querySelector('.upper-overlay-mask');
       const lower_mask = document.querySelector('.lower-overlay-mask');
       if (upper_mask) {
         upper_mask.classList.add('fade-out');
       }
-	  if (lower_mask) {
-        lower_mask.classList.add('fade-out');
+      if (lower_mask) {
+          lower_mask.classList.add('fade-out');
       }
-    }, 5000); // 5•bŒã‚ÉƒtƒF[ƒhƒAƒEƒg
+    }, 5000); // 5ç§’å¾Œã«ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆ
 	  */
 	  
     checkEndInterval = setInterval(() => {
@@ -138,17 +137,82 @@ function onPlayerStateChange(event) {
         clearInterval(checkEndInterval);
 /*		  document.getElementById('custom-controls').style.display = 'none';
 */
-		  	if (nextVideoMap[currentVideo]) {
-			  switchVideo(nextVideoMap[currentVideo]);
-			} else {
-			  player.pauseVideo();
-			}
+		  	if (videoObj[currentVideo].next !== null) {
+			    switchVideo(videoObj[currentVideo].next);
+        } else {
+          player.pauseVideo();
+        }
       }
     }, 100);
+
+    //button_svgã‚’å…ƒã«ãƒœã‚¿ãƒ³ã‚’ç”Ÿæˆ
+    button_svg.innerHTML = '';
+    videoObj[currentVideo].button.forEach(data => {
+      // <a href="#" class="area hidden" id="Video0003">
+      //   <path d="M187,117 L634,117 L634,770 L187,770 Z" stroke="none" />
+      // </a>
+      // data.coordinateã¯[x,y,w,h]
+      const a = document.createElementNS('http://www.w3.org/2000/svg', 'a');
+      a.setAttribute('href', data.href);
+      a.setAttribute('target', '_blank');
+      a.classList.add('area', 'hidden');
+      a.id = data.id;
+
+      if (data.type === 'circle') {
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', data.coordinate[0]);
+        circle.setAttribute('cy', data.coordinate[1]);
+        circle.setAttribute('r', data.coordinate[2]);
+        a.appendChild(circle);
+      } else if (data.type === 'rect') {
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        const coods = [
+          'M', data.coordinate[0], ',', data.coordinate[1],
+          ' L', data.coordinate[0] + data.coordinate[2], ',', data.coordinate[1],
+          ' L', data.coordinate[0] + data.coordinate[2], ',', data.coordinate[1] + data.coordinate[3],
+          ' L', data.coordinate[0], ',', data.coordinate[1] + data.coordinate[3]
+        ];
+        path.setAttribute('d', `${coods.join('')} Z`);
+        path.setAttribute('stroke', 'none');
+        a.appendChild(path);
+      }
+
+      button_svg.appendChild(a);
+    });
+    console.log(button_svg.innerHTML);
+
+    //ã‚¤ãƒ™ãƒ³ãƒˆãƒªã‚¹ãƒŠãƒ¼è¿½åŠ 
+    button_svg.querySelectorAll('.area').forEach(area => {
+      if (area.id === "to-ExternalURL") return;
+      area.addEventListener('click', (event) => {
+        event.preventDefault();
+        const nextId = area.id.match(/Video\d{4}/);
+        if (nextId) {
+          switchVideo(nextId[0]);
+        }
+      });
+    });
+
+    //breadcrumbã«è¦ªè¦ç´ ã‚’é †ç•ªã«ãŸã©ã£ã¦ã„ã£ã¦<ul>å†…ã«è¿½åŠ ã—ã¦ã„ã
+    breadcrumb.innerHTML = '';
+    let currentParent = currentVideo;
+    while (currentParent) {
+      const listItem = document.createElement('li');
+      const link = document.createElement('a');
+      link.textContent = videoObj[currentParent].name;
+      const videoId = currentParent;
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        switchVideo(videoId);
+      });
+      listItem.appendChild(link);
+      breadcrumb.insertBefore(listItem, breadcrumb.firstChild);
+      currentParent = videoObj[currentParent].parent ? videoObj[currentParent].parent : null;
+    }
   }
 
   if (event.data === YT.PlayerState.ENDED || event.data === YT.PlayerState.PAUSED) {
-    // Ä¶I—¹‚Ü‚½‚Íˆê’â~‚ÉŠÄ‹‚ğ’â~
+    // å†ç”Ÿçµ‚äº†æ™‚ã¾ãŸã¯ä¸€æ™‚åœæ­¢æ™‚ã«ç›£è¦–ã‚’åœæ­¢
     clearInterval(checkEndInterval);
 	  
 	  /*
@@ -163,39 +227,41 @@ function onPlayerStateChange(event) {
 
 function switchVideo(id) {
   currentVideo = id;
-  timeMap = timeMaps[id];
+  // timeMap = buttonMap[currentVideo];
   console.log("currentVideo:", currentVideo);
+
+  // if(id === 'ExternalURL') return;
 	/*
-  // ƒ{ƒ^ƒ“‚ğæ‚É”ñ•\¦‚É‚·‚éF
+  // ãƒœã‚¿ãƒ³ã‚’å…ˆã«éè¡¨ç¤ºã«ã™ã‚‹ï¼š
   document.querySelectorAll('.svg-map .area').forEach(el => el.classList.add('hidden'));
 	*/
-  // ƒtƒF[ƒhƒAƒEƒg
+  // ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆ
   const fader = document.querySelector('.fade-target');
-//@fader.style.transition = 'opacity 0.4s ease';
+  //ã€€fader.style.transition = 'opacity 0.4s ease';
   fader.style.opacity = '0';
 	
   setTimeout(() => {
-    player.loadVideoById(videoMap[id]);
+    player.loadVideoById(videoObj[id].videoId);
 	  console.log(player);
 	  
-    // •\¦ƒ{ƒ^ƒ“‚ÌXV
-    document.querySelectorAll('.svg-map .area').forEach(el => {
-      el.classList.add('hidden');
-      // ŒÃ‚¢ƒŠƒXƒi[‚ğ‰ğœiŠÈˆÕ‚È‘Îô‚Æ‚µ‚Ä cloneNode ‚Å“ü‚ê‘Ö‚¦j
-      const newEl = el.cloneNode(true);
-      el.parentNode.replaceChild(newEl, el);
-    });
+    // è¡¨ç¤ºãƒœã‚¿ãƒ³ã®æ›´æ–°
+    // document.querySelectorAll('.svg-map .area').forEach(el => {
+    //   el.classList.add('hidden');
+    //   // å¤ã„ãƒªã‚¹ãƒŠãƒ¼ã‚’è§£é™¤ï¼ˆç°¡æ˜“ãªå¯¾ç­–ã¨ã—ã¦ cloneNode ã§å…¥ã‚Œæ›¿ãˆï¼‰
+    //   const newEl = el.cloneNode(true);
+    //   el.parentNode.replaceChild(newEl, el);
+    // });
 	  
-	 // Œ»İ‚Ì timeMap ‚É“o˜^‚³‚ê‚½‚·‚×‚Ä‚Ìƒ{ƒ^ƒ“‚ÉƒŠƒXƒi[‚ğ’Ç‰Á
-	timeMap.forEach(area => {
-	  const el = document.getElementById(area.id);
-	  if (el) {
-		el.addEventListener('click', () => {
-		  const nextId = area.id.replace('to-', '');
-		  switchVideo(nextId);
-		});
-	  }
-	});
+    // ç¾åœ¨ã® timeMap ã«ç™»éŒ²ã•ã‚ŒãŸã™ã¹ã¦ã®ãƒœã‚¿ãƒ³ã«ãƒªã‚¹ãƒŠãƒ¼ã‚’è¿½åŠ 
+    // timeMap.forEach(area => {
+    //   const el = document.getElementById(area.id);
+    //   if (el && area.id !== 'to-ExternalURL') {
+    //     el.addEventListener('click', () => {
+    //       const nextId = area.id.match(/Video\d{4}/);
+    //       switchVideo(nextId);
+    //     });
+    //   }
+    // });
 	  
 	  
     setTimeout(() => {
@@ -208,7 +274,7 @@ function switchVideo(id) {
 
 document.getElementById('pause-button').addEventListener('click', (event) => {
   const isPaused = player.getPlayerState() === YT.PlayerState.PAUSED;
-const icon = event.currentTarget.querySelector('img'); // ‘ÎÛ‚Ì‰æ‘œ‚ğæ“¾
+  const icon = event.currentTarget.querySelector('img'); // å¯¾è±¡ã®ç”»åƒã‚’å–å¾—
   if (isPaused) {
     player.playVideo();
     icon.src = 'icons/pause.svg';
@@ -222,7 +288,7 @@ const icon = event.currentTarget.querySelector('img'); // ‘ÎÛ‚Ì‰æ‘œ‚ğæ“¾
 
 document.getElementById('mute-button').addEventListener('click', (event) => {
   isMuted = !isMuted;
-	  const icon = event.currentTarget.querySelector('img'); // ‘ÎÛ‚Ì‰æ‘œ‚ğæ“¾
+	  const icon = event.currentTarget.querySelector('img'); // å¯¾è±¡ã®ç”»åƒã‚’å–å¾—
   if (isMuted) {
     player.mute();
     icon.src = 'icons/mute.svg';
@@ -234,3 +300,65 @@ document.getElementById('mute-button').addEventListener('click', (event) => {
   }
 });
 
+// window.addEventListener("visibilitychange", event => {
+//   if (document.visibilityState === "visible") {x
+//     const iframe = document.getElementById("player");
+//     if (iframe) {
+//       console.log("iframe found");
+//       const temp = iframe.src;
+//       iframe.src = "";
+//       iframe.src = temp;
+
+//     }
+//   }
+// });
+
+// const menuBarWrapper = document.getElementById('menu-bar-wrapper');
+// const menuArrow = document.getElementById('menu-arrow');
+// let menuVisible = true;
+// menuArrow.addEventListener('click', () => {
+//   menuVisible = !menuVisible;
+//   if(menuVisible) {
+//     menuBarWrapper.classList.remove('hide');
+//     menuArrow.classList.remove('down'); // ä¸Šå‘ã
+//   } else {
+//     menuBarWrapper.classList.add('hide');
+//     menuArrow.classList.add('down'); // ä¸‹å‘ã
+//   }
+// });
+
+document.getElementById('seekbar').addEventListener('click', (event) => {
+  //ã‚¯ãƒªãƒƒã‚¯ã•ã‚ŒãŸä½ç½®ã‚’æ¤œçŸ¥ã—ã¦å‹•ç”»ã®æ™‚é–“ã‚’å¤‰æ›´ã™ã‚‹
+  const seekbar = document.getElementById('seekbar');
+  const rect = seekbar.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const width = rect.width;
+  const duration = player.getDuration();
+  const newTime = (x / width) * (duration - 1.5);
+  player.seekTo(newTime);
+});
+
+let offsetX = 0, isDragging = false;
+
+// document.querySelector('#circle').addEventListener('mousedown', (e) => {
+//   isDragging = true;
+//   // offsetX = e.clientX - circle.offsetLeft;
+//   console.log(offsetX);
+// });
+
+// document.addEventListener('mousemove', (e) => {
+//   const seekbar = document.getElementById('seekbar');
+//   if (isDragging) {
+//     const duration = player.getDuration();
+//     const width = seekbar.offsetWidth;
+//     //ã‚·ãƒ¼ã‚¯ãƒãƒ¼ã®ã™ã¹ã¦ã®ç”»é¢ã«å¯¾ã™ã‚‹å·¦ç«¯ã‹ã‚‰ã®è·é›¢
+//     const left = seekbar.getBoundingClientRect().left;
+//     const X = e.clientX - left;
+//     const newTime = (X / width) * (duration - 1.5);
+//     player.seekTo(newTime);
+//   }
+// });
+
+// document.addEventListener('mouseup', () => {
+//   isDragging = false;
+// });
